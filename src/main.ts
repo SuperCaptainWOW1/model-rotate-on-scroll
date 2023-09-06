@@ -33,9 +33,13 @@ function startRender() {
   }
   animate();
 
-  const slider = document.querySelector(".slider");
+  const slider: HTMLDivElement | null = document.querySelector(".slider");
 
   if (slider) {
+    slider.addEventListener("wheel", (e) => {
+      slider.scrollBy({ left: e.deltaY, behavior: "smooth" });
+    });
+
     slider.addEventListener("scroll", () => {
       const maxScrollLeft = slider.scrollWidth - slider.clientWidth;
       const scrollLeftPercent = slider.scrollLeft / maxScrollLeft;
