@@ -25,13 +25,17 @@ canvas {
 
   display: flex;
 
-  /* max-width: 60vw; */
-  width: 700px;
+  max-width: 700px;
   overflow-y: auto;
 
   padding-bottom: 20px;
+  cursor: pointer;
+}
 
-  scroll-behavior: smooth;
+@media (max-width: 700px) {
+  .slider {
+    max-width: 70vw;
+  }
 }
 
 .slider::-webkit-scrollbar {
@@ -63,5 +67,5 @@ canvas {
   width: 182px;
   flex-shrink: 0;
 
-  cursor: pointer;
+  pointer-events: none;
 }

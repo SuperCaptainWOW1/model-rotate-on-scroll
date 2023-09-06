@@ -34,10 +34,15 @@ function startRender() {
   animate();
 
   const slider: HTMLDivElement | null = document.querySelector(".slider");
+  let currentSliderItemId = 0;
 
-  if (slider) {
+  if (slider !== null) {
     slider.addEventListener("wheel", (e) => {
-      slider.scrollBy({ left: e.deltaY, behavior: "smooth" });
+      e.preventDefault();
+    });
+
+    slider.addEventListener("touchmove", (e) => {
+      e.preventDefault();
     });
 
     slider.addEventListener("scroll", () => {
@@ -50,6 +55,31 @@ function startRender() {
         0
       );
       targetRotation.setFromEuler(eulerRotation);
+    });
+
+    slider.addEventListener("click", (e) => {
+      e.preventDefault();
+      const rect = slider.getBoundingClientRect();
+
+      const relativeX = e.clientX - rect.left;
+
+      const sliderItems = document.querySelectorAll(".slider-item");
+      if (!sliderItems) return;
+
+      if (relativeX < rect.width / 2 && currentSliderItemId - 1 > -1) {
+        currentSliderItemId -= 1;
+      } else if (
+        relativeX > rect.width / 2 &&
+        currentSliderItemId + 1 < sliderItems.length &&
+        slider.scrollLeft !== slider.scrollWidth - slider.clientWidth
+      ) {
+        currentSliderItemId += 1;
+      }
+
+      sliderItems[currentSliderItemId].scrollIntoView({
+        inline: "start",
+        behavior: "smooth",
+      });
     });
   }
   window.addEventListener("resize", () => {
