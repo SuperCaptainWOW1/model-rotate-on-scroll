@@ -25,7 +25,8 @@ canvas {
 
   display: flex;
 
-  max-width: 60vw;
+  /* max-width: 60vw; */
+  width: 700px;
   overflow-y: auto;
 
   padding-bottom: 20px;
