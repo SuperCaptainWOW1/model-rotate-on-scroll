@@ -33,7 +33,15 @@ function startRender() {
 
   const loader = new GLTFLoader();
   loader.load("./tooth.glb", (gltf) => {
-    group.add(gltf.scene);
+    const mesh = gltf.scene.children.find(
+      (obj) => obj instanceof THREE.Mesh
+    ) as THREE.Mesh;
+    if (mesh.material instanceof THREE.MeshStandardMaterial) {
+      mesh.material.transparent = true;
+      mesh.material.opacity = 0;
+    }
+
+    group.add(mesh);
     group.position.set(0, 0, -0.2);
   });
 
@@ -43,6 +51,11 @@ function startRender() {
     requestAnimationFrame(animate);
 
     group.quaternion.slerp(targetRotation, 0.02);
+    if (
+      group.children[0] instanceof THREE.Mesh &&
+      group.children[0].material.opacity < 1
+    )
+      group.children[0].material.opacity += 0.01;
 
     renderer.render(scene, camera);
   }
