@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
-const maxRotation = Math.PI / 6;
+const maxRotation = Math.PI;
 
 function startRender() {
   const scene = new THREE.Scene();
