@@ -1,10 +1,11 @@
 import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
-const maxRotation = Math.PI / 2;
+const maxRotation = Math.PI / 6;
 
 function startRender() {
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color("#4098D5");
+  scene.background = new THREE.Color("#4c7be0");
   const camera = new THREE.PerspectiveCamera(
     60,
     window.innerWidth / window.innerHeight,
@@ -14,20 +15,34 @@ function startRender() {
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x000000, 0);
+  // renderer.toneMapping = THREE.ACESFilmicToneMapping;
   document.querySelector("#app")?.appendChild(renderer.domElement);
 
-  const geometry = new THREE.BoxGeometry(1, 1, 1);
-  const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
-  const cube = new THREE.Mesh(geometry, material);
-  scene.add(cube);
-  cube.position.set(0, 0, -5);
+  // const geometry = new THREE.BoxGeometry(1, 1, 1);
+  // const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  // const cube = new THREE.Mesh(geometry, material);
+  // scene.add(cube);
+  // cube.position.set(0, 0, -5);
+
+  const light = new THREE.HemisphereLight(0xffffff, 0xffffff, 3.2);
+  scene.add(light);
+
+  const group = new THREE.Group();
+  scene.add(group);
+
+  const loader = new GLTFLoader();
+  loader.load("./tooth.glb", (gltf) => {
+    group.add(gltf.scene);
+    group.position.set(0, 0, -0.2);
+  });
 
   const targetRotation = new THREE.Quaternion();
 
   function animate() {
     requestAnimationFrame(animate);
 
-    cube.quaternion.slerp(targetRotation, 0.02);
+    group.quaternion.slerp(targetRotation, 0.02);
 
     renderer.render(scene, camera);
   }
